@@ -25,22 +25,19 @@ class HashMap:
 
         found_key = False
         index = 0
-        for index, record in enumerate(bucket):
-            record_key, record_val = record
+        for index, key in enumerate(bucket):
 
             # check if the bucket has same key as
             # the key to be inserted
-            if record_key == val:
+            if key == val:
                 found_key = True
                 break
 
         # If the bucket has same key as the key to be inserted,
         # Update the key value
         # Otherwise append the new key-value pair to the bucket
-        if found_key:
-            bucket[index] = (val, val)
-        else:
-            bucket.append((val, val))
+        if not found_key:
+            bucket.append(val)
 
     # Return searched value with specific key
     def get_val(self, key):
@@ -53,12 +50,11 @@ class HashMap:
         bucket = self.hash_map[hashed_key]
 
         found_key = False
-        for index, record in enumerate(bucket):
-            record_key, record_val = record
+        for index, val in enumerate(bucket):
 
             # check if the bucket has same key as
             # the key being searched
-            if record_key == key:
+            if val == key:
                 found_key = True
                 break
 
@@ -66,7 +62,7 @@ class HashMap:
         # Return the value found
         # Otherwise indicate there was no record found
         if found_key:
-            return record_val
+            return val
         else:
             return "No record found"
 
@@ -81,12 +77,10 @@ class HashMap:
         bucket = self.hash_map[hashed_key]
 
         found_key = False
-        for index, record in enumerate(bucket):
-            record_key, record_val = record
-
+        for index, val in enumerate(bucket):
             # check if the bucket has same key as
             # the key to be deleted
-            if record_key == key:
+            if val == key:
                 found_key = True
                 break
         if found_key:
