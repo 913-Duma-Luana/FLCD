@@ -15,10 +15,10 @@ class HashMap:
         return sum_of_ascii_codes % self.size
 
     # Insert values into hash map
-    def set_val(self, key, val):
+    def set_val(self, val):
 
         # Get the index from the key
-        hashed_key = self.hash(key)
+        hashed_key = self.hash(val)
 
         # Get the bucket corresponding to index
         bucket = self.hash_map[hashed_key]
@@ -30,7 +30,7 @@ class HashMap:
 
             # check if the bucket has same key as
             # the key to be inserted
-            if record_key == key:
+            if record_key == val:
                 found_key = True
                 break
 
@@ -38,9 +38,9 @@ class HashMap:
         # Update the key value
         # Otherwise append the new key-value pair to the bucket
         if found_key:
-            bucket[index] = (key, val)
+            bucket[index] = (val, val)
         else:
-            bucket.append((key, val))
+            bucket.append((val, val))
 
     # Return searched value with specific key
     def get_val(self, key):
