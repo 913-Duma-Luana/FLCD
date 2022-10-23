@@ -1,28 +1,22 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-from hash_map import HashMap
-
-# Press the green button in the gutter to run the script.
+from symbol_table import SymbolTable
 
 if __name__ == '__main__':
-    ST_identifiers = HashMap(13)  # 13 is a prime number
-    ST_constants = HashMap(13)
+    ST_identifiers = SymbolTable(13)  # 13 is a prime number
+    ST_constants = SymbolTable(13)
 
-    ST_identifiers.set_val('a')
-    ST_identifiers.set_val('test')
-    ST_identifiers.set_val('x')
+    ST_identifiers.add('a')
+    ST_identifiers.add('test')
+    ST_identifiers.add('x')
     print(ST_identifiers)
-    print(ST_identifiers.get_val('test'))
-    ST_identifiers.delete_val('test')
+    print(ST_identifiers.get('test'))
+    ST_identifiers.delete('test')
     print(ST_identifiers)
     print()
 
-    ST_constants.set_val(1)
-    ST_constants.set_val("This is a text")
-    ST_constants.set_val(-5)
+    ST_constants.add(1)
+    ST_constants.add("This is a text")
+    ST_constants.add(-5)
     print(ST_constants)
-    print(ST_constants.get_val(-5))
-    ST_constants.delete_val(-5)
+    print(ST_constants.get(-5))
+    ST_constants.delete(-5)
     print(ST_constants)
