@@ -32,7 +32,7 @@ if __name__ == '__main__':
                         comment = False
                     continue
                 if token in white_space_separators:
-                    pif.add(codification[token], -1)
+                    continue
                 elif token in separators + operators + reservedWords:
                     pif.add(codification[token], -1)
                     was_last_token_identifier = False
@@ -53,7 +53,7 @@ if __name__ == '__main__':
                     raise Exception('Unknown token ' + token + ' at line ' + str(line_number))
 
     print('Program Internal Form: \n', pif.stringWithNames())
-    print('Symbol Table: \n', symbolTable.stringTableLook())
+    print('Symbol Table: \n', symbolTable)
 
     with open("PIF.txt", "w") as file:
         file.write(str(pif))

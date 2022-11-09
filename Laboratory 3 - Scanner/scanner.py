@@ -71,7 +71,7 @@ def separate_into_tokens(line, separators):
 
 
 def is_identifier(token):
-    match = re.match(r'^[a-zA-Z]([a-zA-Z]|[0-9]|_){,64}$', token) is not None
+    match = re.match(r'^[a-zA-Z]([a-zA-Z]|[0-9]|_){,256}$', token) is not None
     return match
 
 

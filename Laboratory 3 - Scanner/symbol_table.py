@@ -28,11 +28,11 @@ class SymbolTable:
             # check if the bucket already contains the value to be added
             if value == val:
                 found_key = True
-                break
+                return hashed_key, index
 
         if not found_key:
             bucket.append(val)
-        return hashed_key
+        return hashed_key, len(bucket)-1
 
     def get(self, val):
         # Get the index from the key using hash function
@@ -78,7 +78,12 @@ class SymbolTable:
 
     # To print the items of hash map
     def __str__(self):
-        return "".join(str(item) for item in self.hash_table)
+        final_str = ""
+        for i in range(len(self.hash_table)):
+            item = self.hash_table[i]
+            if len(item) > 0:
+                final_str += str(i) + ": " + str(item) + "\n"
+        return final_str
 
     def stringTableLook(self):
         idx = 0
