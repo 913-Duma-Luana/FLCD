@@ -1,0 +1,15 @@
+function gcd(a,b)
+{
+	if (a==0)
+		{return b}
+	return gcd(b%a,a)
+}
+function main(){
+	number a
+	number b
+	read(a)
+	read(b)
+	number result = gcd(a,b)
+	write("gcd" + result)
+    return
+}

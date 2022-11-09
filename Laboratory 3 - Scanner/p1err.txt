@@ -1,0 +1,15 @@
+function gcd(a,b)
+{
+	if (a==0)
+		{return b}
+	return gcd(b%a,a)
+}
+functio main(){ /* line 7: here I have functio instead of the reserved word function */
+	number 2a	/* line 8: The name of a variable cannot begin with a digit */
+	number b
+	read(a)
+	read(b)
+	number result = gcd(a,b)
+	write("gcd=" + result)
+    return
+}

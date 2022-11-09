@@ -1,0 +1,22 @@
+function max(arrayName)
+{
+	len = length(arrayName)
+	if(len<1) {return 0}
+	m = arrayName[0]
+	for(i=1, i<len, i++){
+		if(arrayName[i] > m) {m = arrayName[i]}
+	}
+	return m
+}
+function main(){
+	array a
+	number m
+	number input = 1
+	while(input != 0){
+		read(input)
+		a.append(input)
+	}
+	m = max(a)
+	write("The maximum is " + m)
+	return
+}
