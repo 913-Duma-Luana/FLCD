@@ -15,13 +15,6 @@ if __name__ == '__main__':
         print("The file could not be read.")
         exit(1)
 
-    # with open(fileName, encoding="utf8") as file:
-    #     idx = 0
-    #     for line in file:
-    #         print("Line " + str(idx) + ":")
-    #         idx += 1
-    #         print([token for token in tokenGenerator(line, separators)])
-
     symbolTable = SymbolTable(97)
     pif = PIF()
 
@@ -30,8 +23,7 @@ if __name__ == '__main__':
         comment = False
         for line in file:
             line_number += 1
-            was_last_token_identifier = False
-            for token in tokenGenerator(line[0:-1], separators):
+            for token in separate_into_tokens(line[0:-1], separators):
                 if token == comment_start:
                     comment = True
                     continue
@@ -44,14 +36,15 @@ if __name__ == '__main__':
                 elif token in separators + operators + reservedWords:
                     pif.add(codification[token], -1)
                     was_last_token_identifier = False
-                elif isIdentifier(token):
+                elif is_identifier(token):
                     if was_last_token_identifier:
-                        raise Exception("Syntax error at line " + str(line_number) + ": 2 constants cannot be one right after another.")
+                        raise Exception("Lexical error at line " + str(line_number)
+                                        + ": 2 identifiers cannot be one right after another.")
                     id = symbolTable.add(token)
                     # print(codification['identifier'])
                     pif.add(codification['identifier'], id)
                     was_last_token_identifier = True
-                elif isConstant(token):
+                elif is_constant(token):
                     id = symbolTable.add(token)
                     # print(codification['constant'])
                     pif.add(codification['constant'], id)
@@ -61,3 +54,9 @@ if __name__ == '__main__':
 
     print('Program Internal Form: \n', pif.stringWithNames())
     print('Symbol Table: \n', symbolTable.stringTableLook())
+
+    with open("PIF.txt", "w") as file:
+        file.write(str(pif))
+
+    with open("ST.txt", "w") as file:
+        file.write(str(symbolTable))
