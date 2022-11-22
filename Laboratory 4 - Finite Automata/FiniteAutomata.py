@@ -26,7 +26,10 @@ class FiniteAutomata:
             for line in file:
                 tokens = line.replace('\n', '').split(" ")
                 self.S.append(Transition(tokens[0], tokens[1], tokens[2]))
-                self.Q.append((tokens[0], tokens[2]))
+                if tokens[0] not in self.Q:
+                    self.Q.append(tokens[0])
+                if tokens[2] not in self.Q:
+                    self.Q.append(tokens[2])
                 if tokens[1] not in self.E:
                     self.E.append(tokens[1])
 
