@@ -1,0 +1,79 @@
+from transition import Transition
+
+class FiniteAutomata:
+
+    def __init__(self, Q, E, S, q0, F):
+        self.Q = Q    # set of states
+        self.E = E    # alphabet
+        self.S = S    # set of transitions
+        self.q0 = q0  # initial state
+        self.F = F    # final state
+
+    @staticmethod
+    def parseLine(line):
+        return [value.strip() for value in line.strip().split('=')[1].strip()[1:-1].strip().split(',')]
+
+    def read_automata(self, fileName):
+        with open(fileName) as file:
+
+            # Set the initial state
+            first_line = file.readline()
+            tokens = first_line.replace('\n', '').split(" ")
+            self.q0 = tokens
+
+            # Set the final state
+            second_line = file.readline()
+            tokens = second_line.replace('\n', '').split(" ")
+            self.F = tokens
+
+            # Transitions
+            for line in file:
+                tokens = line.replace('\n', '').split(" ")
+                self.S.append(Transition(tokens[0], tokens[1], tokens[2]))
+                self.Q.append((tokens[0], tokens[2]))
+                if tokens[1] not in self.E:
+                    self.E.append(tokens[1])
+
+    @staticmethod
+    def check_sequence(item, fa, initial_states):
+        result = False
+        following_states = list()
+        if len(initial_states) == 0:
+            return False
+        for state in initial_states:
+            if state in fa.F:
+                return True
+            if len(state) == 0:
+                return False
+            value = item[0:1]
+            for transition in fa.S:
+                if transition.values == value and transition.initial_states == state:
+                    following_states.append(transition.final_states)
+        if len(item) == 1:
+            new_item = ""
+        else:
+            new_item = item[1:]
+        result = result or FiniteAutomata.check_sequence(new_item, fa, following_states)
+        return result
+        # return False
+
+    @staticmethod
+    def readFile(fileName):
+        with open(fileName) as file:
+            for line in file:
+                pass
+            Q = FiniteAutomata.parseLine(file.readline())
+            E = FiniteAutomata.parseLine(file.readline())
+            q0 = file.readline().split('=')[1].strip()
+            F = []
+            S = []
+            return FiniteAutomata(Q, E, S, q0, F)
+
+    def print_Q(self):
+        return 'Q = { ' + ', '.join(self.Q) + ' }\n'
+
+    def print_E(self):
+        return 'E = { ' + ', '.join(self.E) + ' }\n'
+
+    def print_q0(self):
+        return 'q0 = ' + str(self.q0) + '\n'
