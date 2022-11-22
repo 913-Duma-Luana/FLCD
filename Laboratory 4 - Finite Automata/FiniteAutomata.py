@@ -9,10 +9,6 @@ class FiniteAutomata:
         self.q0 = q0  # initial state
         self.F = F    # final state
 
-    @staticmethod
-    def parseLine(line):
-        return [value.strip() for value in line.strip().split('=')[1].strip()[1:-1].strip().split(',')]
-
     def read_automata(self, fileName):
         with open(fileName) as file:
 
@@ -56,24 +52,3 @@ class FiniteAutomata:
         result = result or FiniteAutomata.check_sequence(new_item, fa, following_states)
         return result
         # return False
-
-    @staticmethod
-    def readFile(fileName):
-        with open(fileName) as file:
-            for line in file:
-                pass
-            Q = FiniteAutomata.parseLine(file.readline())
-            E = FiniteAutomata.parseLine(file.readline())
-            q0 = file.readline().split('=')[1].strip()
-            F = []
-            S = []
-            return FiniteAutomata(Q, E, S, q0, F)
-
-    def print_Q(self):
-        return 'Q = { ' + ', '.join(self.Q) + ' }\n'
-
-    def print_E(self):
-        return 'E = { ' + ', '.join(self.E) + ' }\n'
-
-    def print_q0(self):
-        return 'q0 = ' + str(self.q0) + '\n'
