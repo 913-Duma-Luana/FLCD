@@ -1,0 +1,59 @@
+N = { program decllist declaration simpletype arraydecl type cmpdstmt stmtlist stmt simplstmt structstmt ifstmt forstmt forheader whilestmt assignstmt expression term factor indexed_identifier iostmt condition relation }
+E = { { } number string char array = + - * / % ++ -- read write ( ) ' == != < > <= >= or and ; if else while for identifier constant }
+S = program
+P = {
+    program -> decllist \n cmpdstmt
+    decllist -> declaration
+    decllist -> declaration \n decllist
+    declaration -> type identifier
+    simpletype -> number
+    simpletype -> string
+    simpletype -> char
+    arraydecl -> simpletype array [ number ]
+    type -> simpletype
+    type -> arraydecl
+    cmpdstmt -> { stmtlist }
+    stmtlist -> stmt
+    stmtlist -> stmt \n stmtlist
+    stmt -> simplstmt
+    stmt -> structstmt
+    simplstmt -> assignstmt
+    simplstmt -> iostmt
+    simplstmt -> declaration
+    structstmt -> cmpdstmt
+    structstmt -> ifstmt
+    structstmt -> whilestmt
+    structstmt -> forstmt
+    ifstmt -> if condition stmt
+    ifstmt -> if condition stmt else stmt
+    forstmt -> for forheader stmt
+    forheader -> ( number assignstmt ; condition ; assignstmt )
+    whilestmt -> while condition stmt
+    assignstmt -> identifier = expression
+    expression -> term
+    expression -> expression + expression
+    expression -> expression - expression
+    expression -> expression ++
+    expression -> expression --
+    term -> factor
+    term -> term * term
+    term -> term / term
+    term -> term % term
+    factor -> ( expression )
+    factor -> integer
+    factor -> identifier
+    factor -> indexed_identifier
+    indexed_identifier -> identifier [ integer ]
+    iostmt -> read identifier
+    iostmt -> write identifier
+    iostmt -> write constant
+    condition -> ( expression relation expression )
+    relation -> <=
+    relation -> >=
+    relation -> !=
+    relation -> ==
+    relation -> >
+    relation -> <
+    relation -> or
+    relation -> and
+}
