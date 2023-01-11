@@ -7,12 +7,9 @@ class Parser:
         self.config = Configuration('q', 1, 'epsilon', 'S')
         self.grammar = grammar
         self.another_try_index = 0
+        self.file_name = grammar.file_name.replace('.txt', '') + "_out.txt"
+        self.file = open(self.file_name, "w")
         # s = state of the parsing (q, b, f, e)
-
-    def head(self, string):
-        if len(string) == 0:
-            return
-        return string[0]
 
     def get_head(self):
         if ' ' in self.config.b:
@@ -65,9 +62,9 @@ class Parser:
 
     def expand(self):
         # When the head of the input stack is a nonterminal
-        print("expand |-- ", end='')
+        self.file.write("expand |-- ")
         if self.get_head() is None:
-            print(self.config.b)
+            self.file.write(self.config.b)
             return None
         if self.config.a == 'epsilon':
             self.config.a = self.get_head() + " 1"
@@ -83,10 +80,11 @@ class Parser:
             self.config.b = self.get_remaining()
         else:
             self.config.b = prod + ' ' + self.get_remaining()
-        print(self.config)
+        self.file.write(str(self.config) + '\n')
+        
 
     def advance(self):
-        print("advance |-- ", end='')
+        self.file.write("advance |-- ")
         if self.get_head() is None:
             return
         self.config.a += ' ' + self.get_head()
@@ -97,15 +95,15 @@ class Parser:
             self.config.b = self.get_remaining()
 
         self.config.i += 1
-        print(self.config)
+        self.file.write(str(self.config) + '\n')
 
     def mom_insuccess(self):
-        print("mom ins |-- ", end='')
+        self.file.write("mom ins |-- ")
         self.config.s = 'b'
-        print(self.config)
+        self.file.write(str(self.config) + '\n')
 
     def back(self):
-        print("back |-- ", end='')
+        self.file.write("back |-- ")
         if self.get_head_a() is None:
             return
         self.config.b = self.get_head_a() + ' ' + self.config.b
@@ -116,7 +114,7 @@ class Parser:
             self.config.a = self.get_remaining_a()
 
         self.config.i -= 1
-        print(self.config)
+        self.file.write(str(self.config) + '\n')
 
     def another_try(self):
 
@@ -124,7 +122,7 @@ class Parser:
             self.config.s = 'e'
             return
         
-        print("ant try |-- ", end='')
+        self.file.write("ant try |-- ")
         index = int(self.get_head_a())
 
         self.config.a = self.get_remaining_a()
@@ -138,7 +136,6 @@ class Parser:
             prev_prod_nr_of_elements = 1
             if index > 0:
                 prev_prod_nr_of_elements = self.get_production(nt, index - 1).count(' ') + 1
-            print(prod, end=' -- ')
             for x in range(prev_prod_nr_of_elements):
                 self.config.b = self.get_remaining()
             if prod != 'epsilon':
@@ -146,16 +143,18 @@ class Parser:
             self.config.a += ' ' + str(index + 1)
             self.config.s = 'q'
 
-        print(self.config)
+        self.file.write(str(self.config) + '\n')
 
     def success(self):
-        print("success |-- ", end='')
+        self.file.write("success |-- ")
         self.config.s = 'f'
-        print(self.config)
+        self.file.write(str(self.config) + '\n')
 
     def algorithm(self, sequence):
         n = len(sequence.split(' '))
-        print(self.config)
+        self.config = Configuration('q', 1, 'epsilon', 'S')
+        self.file = open(self.file_name, "a")
+        self.file.write(str(self.config) + '\n')
         while self.config.s != 'f' and self.config.s != 'e':
             if self.config.s == 'q':
                 if self.config.i == n+1 and len(self.config.b) == 0:
@@ -191,3 +190,48 @@ class Parser:
                 string += items[i] + items[i+1] + ' '
                 i += 1
         return string
+
+    def add_productions_to_file(self, sequence):
+        self.algorithm(sequence)
+        string_of_prod = self.build_string_of_productions()
+        self.file.close()
+        self.file = open(self.file_name, "a")
+        if string_of_prod != '':
+            self.file.write("Sequence accepted\n")
+            self.file.write("String of productions: ")
+            self.file.write(string_of_prod)
+            self.file.close()
+        else:
+            self.file.write("Sequence not accepted")
+            self.file.close()
+
+    def run_tests(self):
+        f = open("tests_result.txt", "w")
+        # We know that our grammar generates correct arithmetic sequences of additions and productions
+        # So, in case we have a readable, syntactically correct arithmetic sequence, the test should pass
+        # Otherwise, the test will fail
+
+        # CORRECT
+        f.write(self.run_test("( int + int )"))
+        f.write(self.run_test("( int * ( int + int ) )"))
+        f.write(self.run_test("( int * ( int + int + int )"))
+        f.write(self.run_test("( int * ( int + int ) )"))
+        f.write(self.run_test("( int + ( int * int ) )"))
+        f.write(self.run_test("( int * int + int )"))
+        f.write(self.run_test("( ( int + int ) + int * int + int )"))
+
+        # WRONG
+        f.write(self.run_test(""))
+        f.write(self.run_test(" int + int "))
+        f.write(self.run_test("( a + int )"))
+        f.write(self.run_test("( + int )"))
+        f.write(self.run_test("( )"))
+        f.write(self.run_test("( + + )"))
+        f.write(self.run_test("( ( int + int ) * int * int + int )"))
+
+    def run_test(self, sequence):
+        string_of_prod = self.algorithm(sequence)
+        if string_of_prod != '':
+            return sequence + " --> CORRECT --> " + string_of_prod + "\n"
+        else:
+            return sequence + " --> WRONG" + "\n"

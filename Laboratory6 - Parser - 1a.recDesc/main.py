@@ -1,15 +1,14 @@
-from FiniteAutomata import FiniteAutomata
 from grammar import Grammar
 from parser import Parser
 
-grammar = Grammar("grammar1.txt")
+grammar1 = Grammar("grammar1.txt")
+grammar2 = Grammar("grammar2.txt")
 
-parser = Parser(grammar)
+parser1 = Parser(grammar1)
+parser2 = Parser(grammar2)
 
-string_of_prod = parser.algorithm("( int + int )")
-if string_of_prod != '':
-    print("Sequence accepted")
-    print("String of productions: ", end='')
-    print(string_of_prod)
-else:
-    print("Sequence not accepted")
+parser1.add_productions_to_file("( int + int )")
+parser2.add_productions_to_file("< and or and >")
+
+# print()
+parser1.run_tests()

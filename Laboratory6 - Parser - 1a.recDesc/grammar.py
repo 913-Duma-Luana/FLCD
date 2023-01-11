@@ -4,6 +4,7 @@ class Grammar:
         self.E = set()  # terminals
         self.P = list()
         self.S = ""
+        self.file_name = file_name
         self.read_from_file(file_name)
 
     def read_from_file(self, file_name):
@@ -52,7 +53,7 @@ class Grammar:
                     production_right = tokens[1].replace('\n', '').replace('\t', '').replace('{', '').replace('}', '').split(' ')
                     while "" in production_right:
                         production_right.remove("")
-                    print(production_right)
+                    # print(production_right)
                     production_left = tokens[0].replace(' ', '').replace('\t', '').replace('{', '').replace('}', '')
                     self.P.append((production_left, production_right))
 
